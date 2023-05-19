@@ -1,6 +1,6 @@
 use crate::prime::{is_prime, next_prime};
 
-#[derive(Debug)]
+#[derive(PartialEq, Debug)]
 pub struct FractionMixed {
     pub num_improprio: i32,
     pub fracao: Fraction,
@@ -12,7 +12,7 @@ impl FractionMixed {
     }
 }
 
-#[derive(Debug)]
+#[derive(PartialEq, Debug)]
 pub struct Fraction {
     pub n: i32,
     pub d: i32,
@@ -95,4 +95,79 @@ pub fn lcm(l: &mut [i32]) -> i32 {
         ind = 0;
     }
     lcm
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn lcm_test1() {
+        let mut x = [5, 2];
+        assert_eq!(10, lcm(&mut x));
+    }
+
+    #[test]
+    fn lcm_test2() {
+        let mut x = [4, 5, 9, 12, 15];
+        assert_eq!(180, lcm(&mut x));
+    }
+
+    #[test]
+    fn apply_lcm_test1() {
+        let mut f = Fraction {n: 10, d: 15};
+        f.apply_lcm(180);
+        assert_eq!(f, Fraction {n: 120, d: 180});
+    }
+
+    #[test]
+    fn simplify_test1() {
+        let mut f = Fraction {n: 10, d: 15};
+        f.simplify();
+        assert_eq!(f, Fraction {n: 2, d: 3});
+    }
+
+    #[test]
+    fn simplify_test2() {
+        let mut f = Fraction {n: 3, d: 18};
+        f.simplify();
+        assert_eq!(f, Fraction {n: 1, d: 6});
+    }
+
+    #[test]
+    fn sum_test1() {
+        let mut f1 = Fraction {n: 3, d: 15};
+        let f2 = Fraction {n: 7, d: 15};
+        f1.sum(&f2);
+        assert_eq!(f1, Fraction {n: 10, d: 15});
+    }
+
+    #[test]
+    fn sub_test1() {
+        let mut f1 = Fraction {n: 8, d: 18};
+        let f2 = Fraction {n: 5, d: 18};
+        f1.sub(&f2);
+        assert_eq!(f1, Fraction {n: 3, d: 18});
+    }
+
+    #[test]
+    fn get_fraction_test1() {
+        let fm = FractionMixed {num_improprio: 5, fracao: Fraction { n: 1, d: 4 }};
+        let f = fm.get_fraction();
+        assert_eq!(f, Fraction {n: 21, d: 4});
+    }
+
+    #[test]
+    fn get_fraction_mixed_test1() {
+        let f = Fraction {n: 21, d: 4};
+        let fm = f.get_fraction_mixed();
+        assert_eq!(fm, FractionMixed {num_improprio: 5, fracao: Fraction { n: 1, d: 4 }})
+    }
+
+    #[test]
+    fn get_fraction_mixed_test2() {
+        let f = Fraction {n: 7, d: 4};
+        let fm = f.get_fraction_mixed();
+        assert_eq!(fm, FractionMixed {num_improprio: 1, fracao: Fraction { n: 3, d: 4 }})
+    }
 }
