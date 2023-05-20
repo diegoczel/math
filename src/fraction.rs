@@ -59,13 +59,23 @@ impl Fraction {
     }
 
     pub fn sum(&mut self, other: &Fraction) {
-        if self.d == other.d {
+        if self.d != other.d {
+            let lcm = lcm(&mut [self.d, other.d]);
+            self.n = lcm / self.d * self.n;
+            self.n = self.n + (lcm / other.d * other.n);
+            self.d = lcm;
+        } else {
             self.n = self.n + other.n;
         }
     }
 
     pub fn sub(&mut self, other: &Fraction) {
-        if self.d == other.d {
+        if self.d != other.d {
+            let lcm = lcm(&mut [self.d, other.d]);
+            self.n = lcm / self.d * self.n;
+            self.n = self.n - (lcm / other.d * other.n);
+            self.d = lcm;
+        } else {
             self.n = if self.n > other.n {self.n - other.n} else {other.n - self.n};
         }
     }
@@ -164,11 +174,87 @@ mod tests {
     }
 
     #[test]
+    fn fraction_sum_test2_d_diff() {
+        let mut f1 = Fraction {n: 5, d: 6};
+        let f2 = Fraction {n: 1, d: 4};
+        f1.sum(&f2);
+        assert_eq!(f1, Fraction {n: 13, d: 12});
+    }
+
+    #[test]
+    fn fraction_sum_test3_d_diff() {
+        let mut f1 = Fraction {n: 9, d: 10};
+        let f2 = Fraction {n: 1, d: 6};
+        f1.sum(&f2);
+        assert_eq!(f1, Fraction {n: 32, d: 30});
+    }
+
+    #[test]
+    fn fraction_sum_test4_d_diff() {
+        let mut f1 = Fraction {n: 1, d: 2};
+        let f2 = Fraction {n: 11, d: 12};
+        f1.sum(&f2);
+        assert_eq!(f1, Fraction {n: 17, d: 12});
+    }
+
+    #[test]
+    fn fraction_sum_test5_d_diff() {
+        let mut f1 = Fraction {n: 3, d: 4};
+        let f2 = Fraction {n: 1, d: 5};
+        f1.sum(&f2);
+        assert_eq!(f1, Fraction {n: 19, d: 20});
+    }
+
+    #[test]
     fn fraction_sub_test1() {
         let mut f1 = Fraction {n: 8, d: 18};
         let f2 = Fraction {n: 5, d: 18};
         f1.sub(&f2);
         assert_eq!(f1, Fraction {n: 3, d: 18});
+    }
+
+    #[test]
+    fn fraction_sub_test2_d_diff() {
+        let mut f1 = Fraction {n: 3, d: 4};
+        let f2 = Fraction {n: 5, d: 8};
+        f1.sub(&f2);
+        assert_eq!(f1, Fraction {n: 1, d: 8});
+    }
+
+    #[test]
+    fn fraction_sub_test3_d_diff() {
+        let mut f1 = Fraction {n: 4, d: 3};
+        let f2 = Fraction {n: 1, d: 5};
+        f1.sub(&f2);
+        assert_eq!(f1, Fraction {n: 17, d: 15});
+    }
+
+    #[test]
+    fn fraction_sub_test4_d_diff() {
+        let mut f1 = Fraction {n: 7, d: 10};
+        let f2 = Fraction {n: 5, d: 8};
+        f1.sub(&f2);
+        assert_eq!(f1, Fraction {n: 3, d: 40});
+    }
+
+    #[test]
+    fn fraction_sum_sub_test1() {
+        let mut f1 = Fraction {n: 1, d: 4};
+        let f2 = Fraction {n: 3, d: 5};
+        let f3 = Fraction {n: 3, d: 10};
+        f1.sum(&f2);
+        f1.sub(&f3);
+        assert_eq!(f1, Fraction {n: 11, d: 20});
+    }
+
+    #[test]
+    fn fraction_sub_sum_test1() {
+        let mut f1 = Fraction {n: 4, d: 9};
+        let f2 = Fraction {n: 1, d: 6};
+        let f3 = Fraction {n: 1, d: 3};
+        f1.sub(&f2);
+        f1.sum(&f3);
+        assert_eq!(f1, Fraction {n: 11, d: 18});
     }
 
     #[test]
