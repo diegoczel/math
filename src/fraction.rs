@@ -27,6 +27,18 @@ impl FractionMixed {
 
         self.num_improprio = self.num_improprio - other.num_improprio;
     }
+
+    pub fn mul(&mut self, other: &FractionMixed) {
+        let mut f1 = self.get_fraction();
+        let f2 = other.get_fraction();
+        f1.mul(&f2);
+        f1.simplify();
+
+        let fm = f1.get_fraction_mixed();
+        self.num_improprio = fm.num_improprio;
+        self.fracao.n = fm.fracao.n;
+        self.fracao.d = fm.fracao.d;
+    }
 }
 
 #[derive(PartialEq, Debug)]
@@ -362,5 +374,67 @@ mod tests {
         let fm2 = FractionMixed {num_improprio: 3, fracao: Fraction { n: 2, d: 5 }};
         fm1.sub(&fm2);
         assert_eq!(fm1, FractionMixed {num_improprio: 4, fracao: Fraction { n: 12, d: 45 }})
+    }
+
+    #[test]
+    fn fraction_mixed_mul_test1() {
+        let mut fm1 = FractionMixed {num_improprio: 1, fracao: Fraction {n: 3, d: 4}};
+        let fm2 = FractionMixed {num_improprio: 7, fracao: Fraction {n: 1, d: 5}};
+        
+        fm1.mul(&fm2);
+        
+        assert_eq!(fm1, FractionMixed {num_improprio: 12, fracao: Fraction {n: 3, d: 5}})
+    }
+
+    #[test]
+    fn fraction_mixed_mul_test2() {
+        let mut fm1 = FractionMixed {num_improprio: 3, fracao: Fraction {n: 3, d: 7}};
+        let fm2 = FractionMixed {num_improprio: 0, fracao: Fraction {n: 2, d: 1}};
+        
+        fm1.mul(&fm2);
+        
+        let f1 = fm1.get_fraction();
+
+        assert_eq!(fm1, FractionMixed {num_improprio: 6, fracao: Fraction {n: 6, d: 7}});
+        assert_eq!(f1, Fraction {n: 48, d: 7});
+    }
+
+    #[test]
+    fn fraction_mixed_mul_test3() {
+        let mut fm1 = FractionMixed {num_improprio: 1, fracao: Fraction {n: 1, d: 3}};
+        let fm2 = FractionMixed {num_improprio: 0, fracao: Fraction {n: 6, d: 7}};
+        
+        fm1.mul(&fm2);
+        
+        let f1 = fm1.get_fraction();
+        
+        assert_eq!(fm1, FractionMixed {num_improprio: 1, fracao: Fraction {n: 1, d: 7}});
+        assert_eq!(f1, Fraction {n: 8, d: 7});
+    }
+
+    #[test]
+    fn fraction_mixed_mul_test4() {
+        let mut fm1 = FractionMixed {num_improprio: 3, fracao: Fraction {n: 1, d: 2}};
+        let fm2 = FractionMixed {num_improprio: 3, fracao: Fraction {n: 1, d: 2}};
+        
+        fm1.mul(&fm2);
+        
+        let f1 = fm1.get_fraction();
+        
+        assert_eq!(fm1, FractionMixed {num_improprio: 12, fracao: Fraction {n: 1, d: 4}});
+        assert_eq!(f1, Fraction {n: 49, d: 4});
+    }
+
+    #[test]
+    fn fraction_mixed_mul_test5() {
+        let mut fm1 = FractionMixed {num_improprio: 4, fracao: Fraction {n: 1, d: 1}};
+        let fm2 = FractionMixed {num_improprio: 1, fracao: Fraction {n: 3, d: 4}};
+        
+        fm1.mul(&fm2);
+        
+        let f1 = fm1.get_fraction();
+        
+        assert_eq!(fm1, FractionMixed {num_improprio: 8, fracao: Fraction {n: 3, d: 4}});
+        assert_eq!(f1, Fraction {n: 35, d: 4});
     }
 }
