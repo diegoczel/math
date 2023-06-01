@@ -124,6 +124,14 @@ impl Fraction {
     pub fn get_fraction_mixed(&self) -> FractionMixed {
         FractionMixed { num_improprio: (self.n / self.d), fracao: Fraction {n: self.n % self.d, d: self.d} }
     }
+
+    pub fn get_percentage(&self) -> f64 {
+        if self.d == 0 {
+            return 0.0;
+        }
+
+        self.n as f64 / self.d as f64 * 100.0
+    }
 }
 
 pub fn lcm(l: &mut [i32]) -> i32 {
@@ -559,5 +567,45 @@ mod tests {
         
         assert_eq!(fm1, FractionMixed {num_improprio: 2, fracao: Fraction {n: 2, d: 9}});
         assert_eq!(f1, Fraction {n: 20, d: 9});
+    }
+}
+
+#[cfg(test)]
+mod fraction {
+    use super::*;
+
+    #[test]
+    fn get_percentage_test1() {
+        assert_eq!((Fraction {n: 6, d: 20}).get_percentage(), 30f64);
+    }
+
+    #[test]
+    fn get_percentage_test2() {
+        assert_eq!((Fraction {n: 7, d: 10}).get_percentage(), 70f64);
+    }
+
+    #[test]
+    fn get_percentage_test3() {
+        assert_eq!((Fraction {n: 9, d: 5}).get_percentage(), 180f64);
+    }
+
+    #[test]
+    fn get_percentage_test4() {
+        assert_eq!((Fraction {n: 9, d: 0}).get_percentage(), 0f64);
+    }
+
+    #[test]
+    fn get_percentage_test5() {
+        assert_eq!((Fraction {n: 9, d: -5}).get_percentage(), -180f64);
+    }
+
+    #[test]
+    fn get_percentage_test6() {
+        assert_eq!((Fraction {n: 1, d: 3}).get_percentage(), 1.0/3.0*100.0);
+    }
+
+    #[test]
+    fn get_percentage_test7() {
+        assert_eq!((Fraction {n: 1, d: -3}).get_percentage(), 1.0/-3.0*100.0);
     }
 }
