@@ -1,7 +1,8 @@
 use fraction::Fraction;
-use crate::fraction::{lcm, FractionMixed};
+use crate::{fraction::{lcm, FractionMixed}};
 
 pub mod fraction;
+pub mod percentage;
 pub mod prime;
 
 fn main() {

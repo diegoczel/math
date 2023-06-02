@@ -608,4 +608,9 @@ mod fraction {
     fn get_percentage_test7() {
         assert_eq!((Fraction {n: 1, d: -3}).get_percentage(), 1.0/-3.0*100.0);
     }
+
+    #[test]
+    fn get_percentage_test8() {
+        assert_eq!((Fraction {n: 12, d: 25}).get_percentage(), 48.0);
+    }
 }
