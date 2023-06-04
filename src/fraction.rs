@@ -132,6 +132,16 @@ impl Fraction {
 
         self.n as f64 / self.d as f64 * 100.0
     }
+
+    pub fn pow(&mut self, exp: i32) {
+        let x = self.n;
+        let y = self.d;
+
+        for _ in 1..exp {
+            self.n = self.n * x;
+            self.d = self.d * y;
+        }
+    }
 }
 
 pub fn lcm(l: &mut [i32]) -> i32 {
@@ -612,5 +622,45 @@ mod fraction {
     #[test]
     fn get_percentage_test8() {
         assert_eq!((Fraction {n: 12, d: 25}).get_percentage(), 48.0);
+    }
+
+    #[test]
+    fn pow_test1() {
+        let mut f = Fraction {n: 2, d: 3};
+        f.pow(3);
+
+        assert_eq!(f, Fraction {n:8, d: 27});
+    }
+
+    #[test]
+    fn pow_test2() {
+        let mut f = Fraction {n: 2, d: 3};
+        f.pow(2);
+
+        assert_eq!(f, Fraction {n:4, d: 9});
+    }
+
+    #[test]
+    fn pow_test3() {
+        let mut f = Fraction {n: 2, d: 3};
+        f.pow(1);
+
+        assert_eq!(f, Fraction {n:2, d: 3});
+    }
+
+    #[test]
+    fn pow_test4() {
+        let mut f = Fraction {n: 4, d: 9};
+        f.pow(2);
+
+        assert_eq!(f, Fraction {n:16, d: 81});
+    }
+
+    #[test]
+    fn pow_test5() {
+        let mut f = Fraction {n: 4, d: 9};
+        f.pow(0);
+
+        assert_eq!(f, Fraction {n:4, d: 9});
     }
 }
